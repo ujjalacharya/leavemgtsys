@@ -1,7 +1,7 @@
 const express   = require('express');
 const app       = express();
 const mongoose  = require('mongoose');
-const PORT      = process.env.PORT || 3000;
+const PORT      = process.env.PORT || 5000;
 const exphbs    = require('express-handlebars');
 const keys      = require('./config/keys');
 const passport  = require('passport');

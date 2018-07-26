@@ -2,13 +2,13 @@ const router = require('express').Router();
 const passport = require('passport');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const checkAuth = require('../config/checkAuth')
+const { checkAuth, checkGuest } = require('../config/checkAuth')
 
-router.get('/login', (req, res) => {
+router.get('/login', checkGuest, (req, res) => {
     res.render('users/login')
 })
 
-router.get('/register', (req, res) => {
+router.get('/register', checkGuest, (req, res) => {
     res.render('users/register')
 })
 
@@ -61,35 +61,35 @@ router.post('/register', (req, res) => {
                     }
                     bcrypt.genSalt(10, (err, salt) => {
                         bcrypt.hash(newuser.password, salt, (err, hash) => {
-                            if(err) throw err;
+                            if (err) throw err;
                             newuser.password = hash
                             new User(newuser).save()
-                                .then(user =>{
+                                .then(user => {
                                     res.redirect('/users/login')
                                 })
                                 .catch(err => console.log(err))
                         });
-                    });               
+                    });
                 }
             })
     }
 
 })
 
-router.post('/login',(req, res, next)=>{
+router.post('/login', (req, res, next) => {
     passport.authenticate('local',
         {
             failureRedirect: '/users/login',
-            successRedirect: '/users/verify'
+            successRedirect: '/'
         })(req, res, next)
-    })
+})
 
-router.get('/logout', (req, res)=>{
+router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/')
 })
 
-router.get('/verify',checkAuth, (req, res)=>{
+router.get('/verify', checkAuth, (req, res) => {
     res.send('Verified')
 })
 module.exports = router;
