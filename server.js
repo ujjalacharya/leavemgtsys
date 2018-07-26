@@ -20,7 +20,7 @@ app.set('view engine', 'handlebars');
 
 //import the routes
 const index = require('./routes/index')
-const auth = require('./routes/auth')
+const users = require('./routes/users')
 
 //Passport middleware
 app.use(passport.initialize())
@@ -28,7 +28,7 @@ app.use(passport.session())
 
 //Using the routes
 app.use('/', index)
-app.use('/auth', auth)
+app.use('/users', users)
 
 app.listen(PORT, ()=>{
     console.log(`App started at port ${PORT}`)
